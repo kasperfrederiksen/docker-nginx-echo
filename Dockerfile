@@ -1,11 +1,8 @@
-FROM nginx:1.15-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-RUN mkdir -p /etc/nginx/html/
-RUN echo "OK" > /etc/nginx/html/index.html
+FROM openresty/openresty:1.11.2.5-alpine
 
 EXPOSE 80 8080 3000 4000 5000
 
-STOPSIGNAL SIGTERM
+ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
-CMD ["nginx", "-g", "daemon off;"]
-
+RUN chgrp -R 0 /usr/local/openresty/nginx/ && \
+    chmod -R g=u /usr/local/openresty/nginx/
